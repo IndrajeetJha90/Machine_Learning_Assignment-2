@@ -32,7 +32,7 @@ model is served through an interactive Streamlit web app.
 
 ## c. GitHub Repository Link
 
-`<< PASTE YOUR GITHUB REPOSITORY URL HERE AFTER PUSHING >>`
+[Machine_Learning_Assignment-2](https://github.com/IndrajeetJha90/Machine_Learning_Assignment-2)
 
 ## d. Models Used
 
