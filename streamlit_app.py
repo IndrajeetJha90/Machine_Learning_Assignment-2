@@ -2,17 +2,12 @@
 streamlit_app.py
 ---------------
 Interactive web application for comparing breast cancer classification models.
-
-Features:
-  - Upload custom test data (CSV) or fall back to bundled test_data.csv
-  - Select from 5 pre-trained classifiers via dropdown
-  - Display all 6 evaluation metrics for the chosen model
-  - Visualize confusion matrix and full classification report
-  - Side-by-side comparison of all models
-
-Run locally:
-    streamlit run streamlit_app.py
 """
+
+# ========== SUPPRESS SKLEARN VERSION WARNINGS ==========
+import warnings
+warnings.filterwarnings("ignore", category=UserWarning, module="sklearn")
+# ======================================================
 
 import json
 import joblib
@@ -33,7 +28,6 @@ from sklearn.metrics import (
 )
 import plotly.express as px
 import plotly.graph_objects as go
-from plotly.subplots import make_subplots
 
 # ========== PAGE CONFIGURATION ==========
 st.set_page_config(
@@ -64,7 +58,6 @@ st.markdown("""
     
     /* Metric cards with gradient backgrounds */
     .metric-card {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         padding: 1.2rem;
         border-radius: 12px;
         color: white;
@@ -203,19 +196,23 @@ MODEL_COLORS = {
 @st.cache_resource
 def load_artifacts():
     """Load all pre-trained models and supporting artifacts from disk."""
-    scaler = joblib.load("models/scaler.joblib")
-    feature_names = joblib.load("models/feature_names.joblib")
-    target_names = joblib.load("models/target_names.joblib")
-    
-    models = {
-        name: joblib.load(path) 
-        for name, path in MODEL_PATHS.items()
-    }
-    
-    with open("models/metrics.json", "r") as f:
-        training_metrics = json.load(f)
-    
-    return scaler, feature_names, target_names, models, training_metrics
+    try:
+        scaler = joblib.load("models/scaler.joblib")
+        feature_names = joblib.load("models/feature_names.joblib")
+        target_names = joblib.load("models/target_names.joblib")
+        
+        models = {
+            name: joblib.load(path) 
+            for name, path in MODEL_PATHS.items()
+        }
+        
+        with open("models/metrics.json", "r") as f:
+            training_metrics = json.load(f)
+        
+        return scaler, feature_names, target_names, models, training_metrics
+    except Exception as e:
+        st.error(f"❌ Error loading models: {str(e)}")
+        st.stop()
 
 scaler, feature_names, target_names, models, training_metrics = load_artifacts()
 
@@ -271,7 +268,16 @@ with st.sidebar:
     # Show data info in sidebar
     if uploaded_file is not None:
         st.success(f"✅ Loaded: {uploaded_file.name}")
-        st.info(f"📊 Rows: {pd.read_csv(uploaded_file).shape[0]}")
+        # Reading the file to show info (cached to avoid re-reading)
+        @st.cache_data
+        def get_file_info(file):
+            df_temp = pd.read_csv(file)
+            return df_temp.shape[0]
+        try:
+            rows = get_file_info(uploaded_file)
+            st.info(f"📊 Rows: {rows}")
+        except:
+            pass
     else:
         st.info("📂 Using default test_data.csv")
 
