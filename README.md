@@ -61,7 +61,7 @@ model is served through an interactive Streamlit web app.
 
 ```
 project-folder/
-│-- app.py                  # Streamlit app
+│-- streamlit_app.py                  # Streamlit app
 │-- requirements.txt
 │-- README.md
 │-- test_data.csv           # held-out test split used for evaluation/upload
