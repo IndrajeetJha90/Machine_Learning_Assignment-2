@@ -3,7 +3,7 @@ This script trains five classification models—Logistic Regression, Decision Tr
 
 It evaluates each model with six performance metrics and saves the following outputs:
 
-Each trained model as a .joblib file in the model/ folder
+Each trained model as a .joblib file in the models/ folder
 
 The fitted StandardScaler as scaler.joblib
 
@@ -16,7 +16,6 @@ import json
 import joblib
 import numpy as np
 import pandas as pd
-
 from sklearn.datasets import load_breast_cancer
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
@@ -25,7 +24,6 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.naive_bayes import GaussianNB
 from sklearn.ensemble import RandomForestClassifier
-
 from sklearn.metrics import (
     accuracy_score,
     roc_auc_score,
@@ -40,7 +38,7 @@ from sklearn.metrics import (
 RANDOM_STATE = 42
 
 # ---------------------------------------------------------------------------
-# 1. Loading dataset of Breast Cancer from Sklearn
+# 1. Load dataset
 # ---------------------------------------------------------------------------
 data = load_breast_cancer(as_frame=True)
 df = data.frame.copy()
@@ -54,11 +52,10 @@ y = df["target"]
 
 # ---------------------------------------------------------------------------
 # 2. Train/test split (80/20, stratified)
-# Stratified ensures that both the training and test sets preserve the same 
-#  proportion of target classes (e.g., if 63% of your dataset is "benign" and 
-#  37% is "malignant," both splits will maintain that exact ratio)
 # ---------------------------------------------------------------------------
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.20, random_state=RANDOM_STATE, stratify=y)
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.20, random_state=RANDOM_STATE, stratify=y
+)
 
 # ---------------------------------------------------------------------------
 # 3. Scale features (fit on train only, to avoid leakage)
@@ -79,7 +76,6 @@ print(f"Saved test_data.csv with {len(test_data)} rows.\n")
 # ---------------------------------------------------------------------------
 # 5. Define models
 # ---------------------------------------------------------------------------
-
 """
 Brief Description of Models:
 1. Logistic Regression: Predicts the probability that an instance belongs to a certain class using a logistic (sigmoid) function.
@@ -123,18 +119,16 @@ models = {
     "Decision Tree": DecisionTreeClassifier(random_state=RANDOM_STATE),
     "kNN": KNeighborsClassifier(n_neighbors=5),
     "Naive Bayes": GaussianNB(),
-    "Random Forest (Ensemble)": RandomForestClassifier(n_estimators=200, random_state=RANDOM_STATE),
+    "Random Forest (Ensemble)": RandomForestClassifier(
+        n_estimators=200, random_state=RANDOM_STATE
+    ),
 }
 
 results = {}
 
 # ---------------------------------------------------------------------------
-# 6. Train the Model, evaluate it and save each model
+# 6. Train, evaluate, and save each model
 # ---------------------------------------------------------------------------
-for name, model in models.items():
-    model.fit(X_train_scaled, y_train)
-    y_pred = model.predict(X_test_scaled)
-    y_proba = model.predict_proba(X_test_scaled)[:, 1]
 
 """
 Brief Classification:
@@ -183,6 +177,12 @@ Interpretation:
 --Key advantage: Works well even with imbalanced datasets (unlike accuracy)
 --Considered a "gold standard" metric for binary classification because it gives a balanced view of all four quadrants of the confusion matrix.
 """
+
+for name, model in models.items():
+    model.fit(X_train_scaled, y_train)
+    y_pred = model.predict(X_test_scaled)
+    y_proba = model.predict_proba(X_test_scaled)[:, 1]
+
     metrics = {
         "Accuracy": round(accuracy_score(y_test, y_pred), 4),
         "AUC": round(roc_auc_score(y_test, y_proba), 4),
@@ -193,7 +193,7 @@ Interpretation:
     }
     results[name] = metrics
 
-    print(f"------ {name} ------")
+    print(f"--- {name} ---")
     print(pd.Series(metrics))
     print("Confusion matrix:\n", confusion_matrix(y_test, y_pred))
     print(classification_report(y_test, y_pred, target_names=data.target_names))
@@ -220,4 +220,4 @@ with open("models/metrics.json", "w") as f:
 
 print("=== Final Comparison Table ===")
 print(comparison_df.to_string())
-print("\nAll models joblib files, scaler, and metrics saved under models/. Done.")
+print("\nAll models, scaler, and metrics saved under models/. Done.")
