@@ -10,6 +10,7 @@ warnings.filterwarnings("ignore", category=UserWarning, module="sklearn")
 # ======================================================
 
 import json
+from pathlib import Path
 import joblib
 import numpy as np
 import pandas as pd
@@ -168,12 +169,15 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # ========== MODEL REGISTRY ==========
+BASE_DIR = Path(__file__).resolve().parent
+MODEL_DIR = BASE_DIR / "models"
+
 MODEL_PATHS = {
-    "Logistic Regression": "models/logistic_regression.joblib",
-    "Decision Tree": "models/decision_tree.joblib",
-    "kNN": "models/knn.joblib",
-    "Naive Bayes": "models/naive_bayes.joblib",
-    "Random Forest (Ensemble)": "models/random_forest_ensemble.joblib",
+    "Logistic Regression": MODEL_DIR / "logistic_regression.joblib",
+    "Decision Tree": MODEL_DIR / "decision_tree.joblib",
+    "kNN": MODEL_DIR / "knn.joblib",
+    "Naive Bayes": MODEL_DIR / "naive_bayes.joblib",
+    "Random Forest (Ensemble)": MODEL_DIR / "random_forest_ensemble.joblib",
 }
 
 MODEL_EMOJIS = {
@@ -197,16 +201,16 @@ MODEL_COLORS = {
 def load_artifacts():
     """Load all pre-trained models and supporting artifacts from disk."""
     try:
-        scaler = joblib.load("models/scaler.joblib")
-        feature_names = joblib.load("models/feature_names.joblib")
-        target_names = joblib.load("models/target_names.joblib")
+        scaler = joblib.load(MODEL_DIR / "scaler.joblib")
+        feature_names = joblib.load(MODEL_DIR / "feature_names.joblib")
+        target_names = joblib.load(MODEL_DIR / "target_names.joblib")
         
         models = {
-            name: joblib.load(path) 
+            name: joblib.load(path)
             for name, path in MODEL_PATHS.items()
         }
         
-        with open("models/metrics.json", "r") as f:
+        with open(MODEL_DIR / "metrics.json", "r") as f:
             training_metrics = json.load(f)
         
         return scaler, feature_names, target_names, models, training_metrics
@@ -285,7 +289,7 @@ with st.sidebar:
 if uploaded_file is not None:
     df = pd.read_csv(uploaded_file)
 else:
-    df = pd.read_csv("test_data.csv")
+    df = pd.read_csv(BASE_DIR / "test_data.csv")
 
 # Validate data
 if "target" not in df.columns:
