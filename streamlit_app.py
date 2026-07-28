@@ -52,13 +52,14 @@ MODEL_PATHS = {
 RANDOM_STATE = 42
 TEST_SIZE = 0.2
 
+"""
+    Load all pre-trained models and supporting artifacts from disk.
+    Cached to avoid reloading on every interaction.
+"""
 
 @st.cache_resource
 def load_artifacts():
-    """
-    Load all pre-trained models and supporting artifacts from disk.
-    Cached to avoid reloading on every interaction.
-    """
+
     scaler = joblib.load("models/scaler.joblib")
     feature_names = joblib.load("models/feature_names.joblib")
     target_names = joblib.load("models/target_names.joblib")
