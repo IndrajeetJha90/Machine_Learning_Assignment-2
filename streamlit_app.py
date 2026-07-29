@@ -325,7 +325,7 @@ with col4:
     malignant = (df["target"] == 1).sum()
     st.metric("⚠️ Malignant", malignant)
 
-st.dataframe(df.head(8), use_container_width=True)
+st.dataframe(df.head(8), width=True)
 
 # ========== EVALUATION FUNCTIONS ==========
 def evaluate_model(model, X_scaled, y_true):
@@ -455,11 +455,11 @@ if not show_comparison:
     
     with col1:
         fig_cm = create_confusion_matrix_plotly(y_true, y_pred, target_names)
-        st.plotly_chart(fig_cm, use_container_width=True)
+        st.plotly_chart(fig_cm, width=True)
     
     with col2:
         fig_radar = create_radar_chart(metrics, selected_model)
-        st.plotly_chart(fig_radar, use_container_width=True)
+        st.plotly_chart(fig_radar, width=True)
     
     # Classification Report
     st.markdown("---")
@@ -472,7 +472,7 @@ if not show_comparison:
         .background_gradient(cmap="Blues", subset=["precision", "recall", "f1-score"])
         .format("{:.3f}", subset=["precision", "recall", "f1-score", "support"])
         .set_properties(**{'font-size': '14px'}),
-        use_container_width=True
+        width=True
     )
 
 else:
@@ -502,7 +502,7 @@ else:
         vmax=1.0
     ).format("{:.4f}")
     
-    st.dataframe(styled_df, use_container_width=True)
+    st.dataframe(styled_df, width=True)
     
     # Best model highlights
     st.markdown("<br>", unsafe_allow_html=True)
@@ -576,7 +576,7 @@ else:
             bargap=0.15,
             plot_bgcolor='rgba(0,0,0,0)'
         )
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width=True)
     
     with col2:
         st.subheader("🌡️ Performance Heatmap")
@@ -596,7 +596,7 @@ else:
             xaxis=dict(tickangle=0),
             plot_bgcolor='rgba(0,0,0,0)'
         )
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width=True)
 
 # ========== FOOTER ==========
 st.markdown("""
