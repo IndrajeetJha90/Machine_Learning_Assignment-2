@@ -230,7 +230,8 @@ st.markdown("""
             Interactive Classifier Comparison & Evaluation Platform
         </p>
         <div style="margin-top: 1rem; display: flex; gap: 2rem; flex-wrap: wrap;">
-            <span style="opacity: 0.8;">📚 BITS Pilani WILP M.Tech (AIML/DSE)</span>
+            <span style="opacity: 0.8;">📚 BITS Pilani WILP : M.Tech (AIML)</span>
+            <span style="opacity: 0.8;">📚 Indrajeet Jha _ BITS ID : 2025ac05463</span>
             <span style="opacity: 0.8;">📊 Assignment 2 — Machine Learning</span>
             <span style="opacity: 0.8;">📈 Wisconsin Dataset • 569 instances • 30 features</span>
         </div>
@@ -325,7 +326,7 @@ with col4:
     malignant = (df["target"] == 1).sum()
     st.metric("⚠️ Malignant", malignant)
 
-st.dataframe(df.head(8), width=True)
+st.dataframe(df.head(8), width="stretch")
 
 # ========== EVALUATION FUNCTIONS ==========
 def evaluate_model(model, X_scaled, y_true):
@@ -455,11 +456,11 @@ if not show_comparison:
     
     with col1:
         fig_cm = create_confusion_matrix_plotly(y_true, y_pred, target_names)
-        st.plotly_chart(fig_cm, width=True)
+        st.plotly_chart(fig_cm, use_container_width=False)
     
     with col2:
         fig_radar = create_radar_chart(metrics, selected_model)
-        st.plotly_chart(fig_radar, width=True)
+        st.plotly_chart(fig_radar, use_container_width=False)
     
     # Classification Report
     st.markdown("---")
@@ -472,7 +473,7 @@ if not show_comparison:
         .background_gradient(cmap="Blues", subset=["precision", "recall", "f1-score"])
         .format("{:.3f}", subset=["precision", "recall", "f1-score", "support"])
         .set_properties(**{'font-size': '14px'}),
-        width=True
+        width="stretch"
     )
 
 else:
@@ -502,7 +503,7 @@ else:
         vmax=1.0
     ).format("{:.4f}")
     
-    st.dataframe(styled_df, width=True)
+    st.dataframe(styled_df, width="stretch")
     
     # Best model highlights
     st.markdown("<br>", unsafe_allow_html=True)
@@ -576,7 +577,7 @@ else:
             bargap=0.15,
             plot_bgcolor='rgba(0,0,0,0)'
         )
-        st.plotly_chart(fig, width=True)
+        st.plotly_chart(fig, use_container_width=False)
     
     with col2:
         st.subheader("🌡️ Performance Heatmap")
@@ -596,7 +597,7 @@ else:
             xaxis=dict(tickangle=0),
             plot_bgcolor='rgba(0,0,0,0)'
         )
-        st.plotly_chart(fig, width=True)
+        st.plotly_chart(fig, use_container_width=False)
 
 # ========== FOOTER ==========
 st.markdown("""
@@ -609,7 +610,7 @@ st.markdown("""
         </span>
         <br>
         <span style="font-size: 0.8rem; opacity: 0.6;">
-            BITS Pilani WILP — M.Tech in AI/ML & Data Science Engineering
+            BITS Pilani WILP — M.Tech in AI/ML Engineering
         </span>
     </div>
 """, unsafe_allow_html=True)
