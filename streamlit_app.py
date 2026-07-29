@@ -606,7 +606,7 @@ st.markdown("""
         Results may differ from training-time evaluation due to different test splits.
         <br><br>
         <span style="font-size: 0.85rem;">
-            Built with ❤️ using Streamlit • Plotly • Scikit-learn
+            Built by Indrajeet Jha using Streamlit • Plotly • Scikit-learn
         </span>
         <br>
         <span style="font-size: 0.8rem; opacity: 0.6;">
