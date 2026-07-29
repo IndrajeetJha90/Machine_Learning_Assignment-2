@@ -89,4 +89,4 @@ streamlit run streamlit_app.py
 
 ## Live App
 
-`<< PASTE YOUR STREAMLIT COMMUNITY CLOUD APP URL HERE >>`
+[Streamlit App 2025ac05463-assignemtn-2](https://2025ac05463-assignment-2.streamlit.app/)
