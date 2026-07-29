@@ -26,7 +26,7 @@ model is served through an interactive Streamlit web app.
 
 > This dataset meets the assignment's minimum requirements (≥500 instances,
 > ≥12 features). To substitute a different Kaggle/UCI dataset, replace the
-> `load_breast_cancer()` call in `model/train_models.py` with
+> `load_breast_cancer()` call in `models/MultiClassificationModel.py` with
 > `pd.read_csv("your_dataset.csv")` — the rest of the pipeline is dataset-agnostic
 > as long as the target column is named `target`.
 
@@ -64,10 +64,10 @@ project-folder/
 │-- streamlit_app.py                  # Streamlit app
 │-- requirements.txt
 │-- README.md
-│-- test_data.csv           # held-out test split used for evaluation/upload
-│-- metrics_comparison.csv  # raw comparison table (machine-readable)
-└── model/
-    │-- train_models.py     # trains all 5 models + saves artifacts
+│-- test_data.csv                     # held-out test split used for evaluation/upload
+│-- metrics_comparison.csv            # raw comparison table (machine-readable)
+└── models/
+    │-- MultiClassificationModel.py   # trains all 5 models + saves artifacts
     │-- logistic_regression.joblib
     │-- decision_tree.joblib
     │-- knn.joblib
@@ -83,8 +83,8 @@ project-folder/
 
 ```bash
 pip install -r requirements.txt
-python model/train_models.py   # regenerates models/test_data.csv/metrics (already included)
-streamlit run app.py
+python models/MultiClassificationModel.py   # regenerates models/test_data.csv/metrics (already included)
+streamlit run streamlit_app.py
 ```
 
 ## Live App
